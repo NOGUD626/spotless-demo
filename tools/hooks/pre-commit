@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# Spotless pre-commit hook (check 版)
+# ステージされたファイルが含まれるサブプロジェクトでだけ spotlessCheck を走らせる。
+# 違反があれば commit を中断する。
+#
+# 有効化:
+#   git config core.hooksPath tools/hooks
+#
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+
+run_check() {
+    project="$1"
+    echo "→ spotlessCheck on $project/"
+    ( cd "$REPO_ROOT/$project" && ./gradlew --quiet spotlessCheck ) || {
+        echo ""
+        echo "✗ Spotless 違反が見つかりました。"
+        echo "  ./gradlew -p $project spotlessApply で修正してから commit し直してください。"
+        exit 1
+    }
+}
+
+if echo "$STAGED" | grep -q '^prettier-web/'; then
+    run_check prettier-web
+fi
+
+if echo "$STAGED" | grep -q '^all-in-demo/'; then
+    run_check all-in-demo
+fi
+
+exit 0

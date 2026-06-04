@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# Spotless pre-commit hook (apply 版)
+# ステージされたファイルが含まれるサブプロジェクトで spotlessApply を走らせ、
+# 整形結果を自動でステージし直す。
+#
+# 有効化 (pre-commit という名前にしてフックパス切り替え):
+#   ln -sf pre-commit-apply tools/hooks/pre-commit
+#   git config core.hooksPath tools/hooks
+#
+# 注意:
+# - 整形でファイルが勝手に変わるのが許容できるチーム向け。
+# - 整形不能なエラー (構文エラー等) が出た場合はそのまま commit が止まる。
+#
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+
+run_apply() {
+    project="$1"
+    echo "→ spotlessApply on $project/"
+    ( cd "$REPO_ROOT/$project" && ./gradlew --quiet spotlessApply )
+    # 整形で変更されたファイルをステージに戻す
+    # (該当 project/ 配下に限定して、関係ないパスを巻き込まない)
+    git diff --name-only -- "$project/" | while IFS= read -r f; do
+        [ -n "$f" ] && git add "$f"
+    done
+}
+
+if echo "$STAGED" | grep -q '^prettier-web/'; then
+    run_apply prettier-web
+fi
+
+if echo "$STAGED" | grep -q '^all-in-demo/'; then
+    run_apply all-in-demo
+fi
+
+exit 0
