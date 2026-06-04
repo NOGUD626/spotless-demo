@@ -174,6 +174,26 @@ cd prettier-web
 
 対応フォーマッタの一覧と詳細は [diffplug/spotless の公式ドキュメント](https://github.com/diffplug/spotless/tree/main/plugin-gradle) を参照。
 
+### Go / Rust は公式ブロックがない
+
+Spotless 6.x / 7.x の時点で **Go / Rust の専用ブロックは存在しない**。`nativeCmd` 汎用ステップで外部バイナリを呼ぶ形で対応する (`gofmt` / `rustfmt` は stdin → stdout で動くので相性がよい)。
+
+```kotlin
+// Go
+format("go") {
+    target("**/*.go")
+    nativeCmd("gofmt", "/opt/homebrew/bin/gofmt", listOf())
+}
+
+// Rust
+format("rust") {
+    target("**/*.rs")
+    nativeCmd("rustfmt", "/opt/homebrew/bin/rustfmt", listOf("--emit", "stdout", "--quiet"))
+}
+```
+
+`nativeCmd(<step 名>, <バイナリ絶対パス>, <引数リスト>)`。CI 環境にバイナリを別途用意する必要があるので、Dockerfile / Actions ワークフロー側にインストールも仕込んでおく。
+
 ---
 
 ## 汎用ステップ (どの `format {}` ブロックにも入れられる)
