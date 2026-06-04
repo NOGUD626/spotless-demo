@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package example;
+
+message User{
+  string name = 1;
+   int32 age=2;
+  repeated string hobbies = 3;
+}
+
+message Address  {
+string city = 1;
+   string zip = 2;
+}
