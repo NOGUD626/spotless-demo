@@ -1,5 +1,12 @@
 # spotless-demo
 
+[![Spotless](https://img.shields.io/badge/Spotless-6.25.0-1B5E20?logo=gradle&logoColor=white)](https://github.com/diffplug/spotless)
+[![Gradle](https://img.shields.io/badge/Gradle-8.10-02303A?logo=gradle&logoColor=white)](https://gradle.org/)
+[![Java](https://img.shields.io/badge/Java-21-007396?logo=openjdk&logoColor=white)](https://adoptium.net/temurin/releases/?version=21)
+[![Kotlin DSL](https://img.shields.io/badge/Kotlin_DSL-7F52FF?logo=kotlin&logoColor=white)](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
+[![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A516-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 [Spotless](https://github.com/diffplug/spotless) (Gradle Plugin) を試すための実験プロジェクト集。
 
 「Spotless 自身はフォーマッタではなく、**フォーマッタを束ねるためのフレームワーク**」という性質を、2 つのサブプロジェクトで体感できるようにした。
@@ -330,5 +337,5 @@ flowchart LR
 
 ## ライセンス
 
-このデモコード自体は MIT ライセンス相当 (説明用なので自由に使ってよい)。
+[MIT License](LICENSE) — 説明用なので自由に使ってよい。
 バンドルされている Spotless / 各フォーマッタはそれぞれのライセンスに従う。
